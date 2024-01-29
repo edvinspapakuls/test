@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.IO Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+</head>
+<body>
+    <input type="text" id="messageInput" placeholder="Enter your message">
+    <button onclick="sendMessage()">Send</button>
+
+    <div id="messages"></div>
+
+    <script>
+        // Connect to the Socket.IO server
+        const socket = io();
+
+        // Function to send the user input to the "message" channel
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+
+            // Emit the message to the "message" channel
+            socket.emit('message', message);
+
+            // Clear the input field
+            messageInput.value = '';
+        }
+
+        // Listen for 'message' events from the server
+socket.on('message', function(message) {
+    // Create a new div element for the message
+    const messageElement = document.createElement('div');
+
+    // Set the text of the message element
+    messageElement.textContent = message;
+
+    // Get the messages container
+    const messagesContainer = document.getElementById('messages');
+
+    // Append the message element to the messages container
+    messagesContainer.appendChild(messageElement);
+});
+
+// Get the message input field
+const messageInput = document.getElementById('messageInput');
+
+// Add an event listener for the 'keydown' event
+messageInput.addEventListener('keydown', function(event) {
+    // Check if the Enter key was pressed
+    if (event.key === 'Enter') {
+        // Prevent the default action to stop the form from being submitted
+        event.preventDefault();
+
+        // Call the sendMessage function
+        sendMessage();
+    }
+});
+    </script>
+</body>
+</html>
